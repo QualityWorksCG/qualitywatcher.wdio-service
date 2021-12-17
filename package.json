@@ -1,0 +1,17 @@
+{
+  "name": "@qualitywatcher/wdio-service",
+  "version": "1.0.0",
+  "description": "",
+  "resolveJsonModule": true,
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Orane Findley",
+  "license": "ISC",
+  "devDependencies": {
+    "fetch": "^1.1.0",
+    "node-fetch": "^2.6.6",
+    "@types/node": "^17.0.0"
+  }
+}
