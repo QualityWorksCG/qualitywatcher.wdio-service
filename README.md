@@ -17,7 +17,7 @@ services: [[QualityWatcherService, {
         qwApiKey: 'QualityWatcher_API_KEY',
         testRunName: "Sample Automation results",
         description: 'This is a sample test run from our sample test automation.',
-        projectId: '100',
+        projectId: 100,
         include_all_cases: true,
     }]],
 ```
