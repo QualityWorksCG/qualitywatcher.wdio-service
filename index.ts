@@ -1,13 +1,14 @@
 import fs from 'fs'
 const fetch = require('node-fetch')
+const { SevereServiceError } = require('webdriverio')
 
 interface userOptions {
     email: string,
-    qwApiKey: string,
+    apiKey: string,
     testRunName: string,
     description: string,
-    projectId: string,
-    include_all_cases: boolean,
+    projectId: Number,
+    includeAllCases: boolean,
 }
 
 interface QWWDIOReporterInterface {
@@ -20,15 +21,16 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
 
     options: {
         email: '',
-        qwApiKey: '',
+        apiKey: '',
         testRunName: '',
         description: '',
-        projectId: '',
-        include_all_cases: false,
+        projectId: 10,
+        includeAllCases: false,
     }
 
     constructor(serviceOptions, capabilities, config) {
         this.options = serviceOptions
+        validateOptions(serviceOptions)
     }
 
     async onPrepare() {
@@ -43,8 +45,11 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
 
     async onComplete() {
         let files = fs.readdirSync(this.dir)
+        let suites = []
 
         await files.forEach(async (fileName) => {
+
+            suites.push(getSuiteId(fileName))
             try {
                 const data = JSON.parse(await fs.readFileSync(this.dir + '/' + fileName, 'utf8'))
 
@@ -62,18 +67,17 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
             let requestBody = {
                 "testRunName": this.options.testRunName,
                 "description": this.options.description,
-                "include_all_cases": this.options.include_all_cases,
-                "projectId": this.options.projectId,
+                "include_all_cases": this.options.includeAllCases,
+                "projectId": parseInt(this.options.projectId),
+                "suites": suites,
                 "results": this.results
             }
-            console.log(requestBody)
 
-            /* Commented until Qualitywatcher API is created
-            await postData('https://qualitywatcher.com/results', requestBody)
+            await postData('https://d6qp7e7hkb.execute-api.us-east-1.amazonaws.com/dev/nimble/v1/test-runner/add-automated-test-execution', requestBody, this.options.apiKey)
                 .then(data => {
+                    console.log('QualityWatcher Results')
                     console.log(data)
                 })
-            */
 
         } catch (err) {
             console.error(err)
@@ -81,14 +85,29 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
     }
 }
 
-async function postData(url, data) {
+function getSuiteId(fileName) {
+    let suiteRegex = /\d+/ig
+    return parseInt(fileName.match(suiteRegex)[0])
+}
+
+function validateOptions(options) {
+    if (!options?.email) { throw new SevereServiceError("Missing property for QualityWatcherService: 'email' [string]") }
+    if (!options?.apiKey) { throw new SevereServiceError("Missing property for QualityWatcherService: 'apiKey' [string]") }
+    if (!options?.testRunName) { throw new SevereServiceError("Missing property for QualityWatcherService: 'testRunName' [string]") }
+    if (!options?.description) { throw new SevereServiceError("Missing property for QualityWatcherService: 'description' [string]") }
+    if (!options?.projectId) { throw new SevereServiceError("Missing property for QualityWatcherService: 'projectId' [number]") }
+    if (!options?.includeAllCases) { throw new SevereServiceError("Missing property for QualityWatcherService: 'includeAllCases' [boolean]") }
+}
+
+async function postData(url, data, apiKey) {
     const response = await fetch(url, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
