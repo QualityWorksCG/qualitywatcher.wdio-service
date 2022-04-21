@@ -25,7 +25,7 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
     apiKey: "";
     testRunName: "";
     description: "";
-    projectId: 10;
+    projectId: Number;
     includeAllCases: false;
   };
 
