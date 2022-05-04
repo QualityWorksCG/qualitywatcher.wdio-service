@@ -1,9 +1,15 @@
 {
   "name": "@qualitywatcher/wdio-service",
-  "version": "1.0.1",
-  "description": "",
+  "version": "1.0.2",
+  "description": "WebdriverIO Service for QualityWatcher",
   "resolveJsonModule": true,
   "main": "lib/index.js",
+  "keywords": [
+    "WebdriverIO",
+    "WDIO",
+    "QualityWatcher",
+    "Service"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
