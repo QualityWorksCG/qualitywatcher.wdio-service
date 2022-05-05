@@ -1,9 +1,9 @@
 {
   "name": "@qualitywatcher/wdio-service",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "WebdriverIO Service for QualityWatcher",
   "resolveJsonModule": true,
-  "main": "lib/index.js",
+  "main": "index.js",
   "keywords": [
     "WebdriverIO",
     "WDIO",

@@ -4,7 +4,7 @@
 This `@qualitywatcher/wdio-service` works in conjunction with the `@qualitywatcher/wdio-reporter`
 
 ### How to Install
-`npm install @qualitywatcher/wdio-service -d`
+`npm install @qualitywatcher/wdio-service --save-dev`
 
 ### Import @qualitywatcher/wdio-service
 `import QualityWatcherService from '@qualitywatcher/wdio-service'`
