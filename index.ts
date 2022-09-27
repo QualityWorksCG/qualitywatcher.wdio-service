@@ -43,7 +43,9 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
     let suites = [];
 
     await files.forEach(async (fileName) => {
-      suites.push(getSuiteId(fileName));
+      let suiteId = getSuiteId(fileName);
+      if(!suites.includes(suiteId)){suites.push(suiteId);}
+
       try {
         const data = JSON.parse(
           await fs.readFileSync(this.dir + "/" + fileName, "utf8")
@@ -143,11 +145,6 @@ function getSuiteId(fileName) {
 }
 
 function validateOptions(options) {
-  if (!options?.email) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'email' [string]"
-    );
-  }
   if (!options?.apiKey) {
     throw new SevereServiceError(
       "Missing property for QualityWatcherService: 'apiKey' [string]"
