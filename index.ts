@@ -145,30 +145,20 @@ function getSuiteId(fileName) {
 }
 
 function validateOptions(options) {
-  if (!options?.apiKey) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'apiKey' [string]"
-    );
+  if (options.apiKey == null || typeof(options.apiKey) != "string") {
+    throw new SevereServiceError("QualityWatcherService: 'apiKey' is required and must be a [string]");
   }
-  if (!options?.testRunName) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'testRunName' [string]"
-    );
+  if (options.testRunName == null || typeof(options.testRunName) != "string") {
+      throw new SevereServiceError("QualityWatcherService: 'testRunName' is required and must be a [string]");
   }
-  if (!options?.description) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'description' [string]"
-    );
+  if (options.description == null || typeof(options.description) != "string") {
+      throw new SevereServiceError("QualityWatcherService: 'description' is required and must be a [string]");
   }
-  if (!options?.projectId) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'projectId' [number]"
-    );
+  if (options.projectId == null || typeof(options.projectId) != "number") {
+      throw new SevereServiceError("QualityWatcherService: 'projectId' is required and must be a [number]");
   }
-  if (!options?.includeAllCases) {
-    throw new SevereServiceError(
-      "Missing property for QualityWatcherService: 'includeAllCases' [boolean]"
-    );
+  if (options.includeAllCases == null || typeof(options.includeAllCases) != "boolean") {
+      throw new SevereServiceError("QualityWatcherService: 'includeAllCases' is required and must be a [boolean]");
   }
 }
 
