@@ -56,11 +56,13 @@ require("dotenv").config();
 
 #### `email`
 Type: `String`
+(optional)
 
 Email address associated with the account
 
 #### `apiKey`
 Type: `String`
+(required)
 
 Get API Key from QualityWatcher
 - Go to your QualityWatcher account
@@ -72,21 +74,24 @@ Get API Key from QualityWatcher
 
 #### `testRunName`
 Type: `String`
+(required)
 
 Title for the test run
 
 #### `description`
 Type: `String`
+(required)
 
 Description for the test run
 
 #### `projectId`
 Type: `Number`
+(required)
 
 The id for the project that include the tests
 
 #### `includeAllCases`
 Type: `Boolean`
-(optional) `[Default:true]`
+(required)
 
 whether or not to include all test cases from each test suite used
