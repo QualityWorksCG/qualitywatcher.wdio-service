@@ -25,8 +25,34 @@ services: [[QualityWatcherService, {
         description: 'This is a sample test run from our sample test automation.',
         projectId: 100,
         includeAllCases: true,
+        // use more optional options
+        report: true,
+        includeCaseWithoutId: true,
+        complete: false,
+        ignoreSkipped: true,
+        generateShareableLink: true,
+        parentSuiteTitle: "Smoke suite",
+        screenshotFolder: "./screenshots",
+        uploadScreenshot: true,
     }]],
 ```
+Full reporter options
+
+| Option                | Required | Description                                           |
+|-----------------------|----------|-------------------------------------------------------|
+| projectId             | Yes      | The ID of the project.                                |
+| testRunName           | Yes      | The name of the test run.                             |
+| description           | Yes      | A description of the test run.                        |
+| includeAllCases       | Yes      | Whether to include all test cases from any suite that at least one automated result belongs to in the created run.                     |
+| complete              | No       | If true, marks the test run as complete.              |
+| includeCaseWithoutId  | No       | Include test cases even if they don't have Suite and Case IDs mapping, this will create new test case/s in QualityWatcher from results.    |
+| report                | No       | If true, send results to QualityWatcher.              |
+| ignoreSkipped         | No       | If true, skipped tests will be ignored.               |
+| generateShareableLink | No       | If true, generates a shareable link for the report.   |
+| parentSuiteTitle      | No       | The suite where test cases without IDs will be added. |
+| screenshotFolder      | No       | The folder where screenshots are stored.              |
+| uploadScreenshot      | No       | If true, uploads screenshots with the report.         |
+
 
 #### 3. Get API Key from QualityWatcher
    - Go to your QualityWatcher account
@@ -53,6 +79,40 @@ echo "QUALITYWATCHER_API_KEY=[API Key]" >> .env
 ```js
 require("dotenv").config();
 ```
+
+#### 6. Additional Notes
+
+##### 1. Both mapped and unmapped results can be sent to QualityWatcher
+
+> If you don't have any tests in QualityWatcher you can still push your results and create new tests by enabling `includeCaseWithoutId` in the service options.
+
+OR
+
+> If you have existing test cases ensure that your WebdriverIO tests includes the ID of your QualityWatcher test case and suite that it belongs to. Make sure the suite and test case IDs are distinct from your test titles:
+
+```Javascript
+// Good:
+it("[S12C1234] Can authenticate a valid user", ...
+it("Can authenticate a valid user [S12C1234]", ...
+
+// Bad:
+it("S12C123Can authenticate a valid user", ...
+it("Can authenticate a valid userS5C123", ...
+```
+
+##### 2. Screenshot name requirement when uploading
+
+> When saving screenshots, ensure that whitespace/s in the name are replaced with "_", without this QualityWatcher will not be able to find screenshots for uploading. See example below:
+
+```js
+afterEach(async function () {
+        // Take a screenshot after each test/assertion
+        const testName = this.currentTest?.fullTitle().replace(/\s/g, '_');
+        const screenshotPath = `./screenshots/${testName}.png`;
+        await browser.saveScreenshot(screenshotPath);
+    });
+```
+
 
 #### `email`
 Type: `String`
