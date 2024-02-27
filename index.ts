@@ -63,7 +63,7 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
 
   async onComplete() {
     if (shouldNotRun(this.options?.report)) {
-      console.log(colors.yellow("[QualityWatcher] Skipping sending results because 'QualityWatcherService.report' option is set to false or not provided."));
+      console.log(colors.yellow("[QualityWatcher] Skipping sending results because 'QualityWatcherService.report' option is set to false."));
       return;
     }
 
@@ -370,5 +370,5 @@ const findScreenshotsInDirectory = (directory) => {
 }
 
 const shouldNotRun = (report: boolean | undefined) => {
-  return typeof report !== 'boolean' || report === false || report == null
+  return report === false;
 }
