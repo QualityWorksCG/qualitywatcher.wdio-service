@@ -289,6 +289,32 @@ function validateOptions(options) {
   if (options.includeAllCases == null || typeof (options.includeAllCases) != "boolean") {
     throw new SevereServiceError("QualityWatcherService: 'includeAllCases' is required and must be a [boolean]");
   }
+
+  // Optional validations
+  if (options.report !== undefined && typeof (options.report) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'report' must be a [boolean]");
+  }
+  if (options.includeCaseWithoutId !== undefined && typeof (options.includeCaseWithoutId) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'includeCaseWithoutId' must be a [boolean]");
+  }
+  if (options.complete !== undefined && typeof (options.complete) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'complete' must be a [boolean]");
+  }
+  if (options.ignoreSkipped !== undefined && typeof (options.ignoreSkipped) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'ignoreSkipped' must be a [boolean]");
+  }
+  if (options.generateShareableLink !== undefined && typeof (options.generateShareableLink) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'generateShareableLink' must be a [boolean]");
+  }
+  if (options.parentSuiteTitle !== undefined && typeof (options.parentSuiteTitle) != "string") {
+    throw new SevereServiceError("QualityWatcherService: 'parentSuiteTitle' must be a [string]");
+  }
+  if (options.screenshotFolder !== undefined && typeof (options.screenshotFolder) != "string") {
+    throw new SevereServiceError("QualityWatcherService: 'screenshotFolder' must be a [string]");
+  }
+  if (options.uploadScreenshot !== undefined && typeof (options.uploadScreenshot) != "boolean") {
+    throw new SevereServiceError("QualityWatcherService: 'uploadScreenshot' must be a [boolean]");
+  }
 }
 
 async function postData(url, data, apiKey) {
