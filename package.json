@@ -1,6 +1,6 @@
 {
   "name": "@qualitywatcher/wdio-service",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "WebdriverIO Service for QualityWatcher",
   "resolveJsonModule": true,
   "main": "index.js",
@@ -26,7 +26,7 @@
     "webdriverio": "^7.19.5"
   },
   "dependencies": {
-    "@qualitywatcher/wdio-reporter": "^1.0.8",
+    "@qualitywatcher/wdio-reporter": "^1.0.9",
     "ansi-colors": "^4.1.1",
     "axios": "^1.6.7"
   }
