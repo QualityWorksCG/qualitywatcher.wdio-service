@@ -2,9 +2,8 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
-const fetch = require("node-fetch");
-const { SevereServiceError } = require("webdriverio");
-const colors = require("ansi-colors");
+import { SevereServiceError } from 'webdriverio'
+import colors from "ansi-colors";
 
 
 interface userOptions {
@@ -33,6 +32,7 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
   private dir = "./QualityWatcher";
   private signedUrl: string;
   private screenshots: string[];
+  private url: string;
 
   options: {
     email: "";
@@ -44,8 +44,10 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
   } & userOptions;
 
   constructor(serviceOptions) {
+    const apiEnvironment = process.env.QUALITYWATCHER_API_ENVIRONMENT || "prod";
     const signedEndpoint = process.env.QUALITYWATCHER_SIGNED_URL_ENDPOINT || "https://api.qualitywatcher.com/nimble/v1/import-management/getSignedUrl-public";
     this.options = serviceOptions;
+    this.url = `https://api.qualitywatcher.com/${apiEnvironment}/nimble/v1/test-runner/add-automated-test-execution`;
     this.signedUrl = signedEndpoint;
     validateOptions(serviceOptions);
   }
@@ -157,31 +159,23 @@ export default class QWWDIOService implements QWWDIOReporterInterface {
       };
 
       await postData(
-        "https://1k0og4tfve.execute-api.us-east-1.amazonaws.com/prod/nimble/v1/test-runner/add-automated-test-execution",
+        this.url,
         requestBody,
         this.options.apiKey
-      )
-        .then(async (response) => {
-          const data = await response.json();
-          if (response.status === 200) {
-            return data;
-          }
-          throw { response, data };
-        })
-        .then((responseData) => {
-          console.log(
-            `[QualityWatcher] Test run "${responseData.title}" has been added to QualityWatcher`,
-            `\n[QualityWatcher] Results published: `,
-            colors.green(responseData.link)
-          );
+      ).then(({ data: responseData }) => {
+        console.log(
+          `[QualityWatcher] Test run "${responseData.title}" has been added to QualityWatcher`,
+          `\n[QualityWatcher] Results published: `,
+          colors.green(responseData.link)
+        );
 
-          if (responseData?.shareableReportLink) {
-            console.log(
-              `[QualityWatcher] Shareable report: `,
-              colors.green(responseData.shareableReportLink || "See QualityWatcher for details")
-            );
-          }
-        })
+        if (responseData?.shareableReportLink) {
+          console.log(
+            `[QualityWatcher] Shareable report: `,
+            colors.green(responseData.shareableReportLink || "See QualityWatcher for details")
+          );
+        }
+      })
         .catch(async ({ response, data }) => {
           colors.red(`[QualityWatcher] There was an error publishing results.`);
           if (response.status === 500) {
@@ -318,13 +312,11 @@ function validateOptions(options) {
 }
 
 async function postData(url, data, apiKey) {
-  return await fetch(url, {
-    method: "POST",
+  return await axios.post(url, data, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify(data),
   });
 }
 
