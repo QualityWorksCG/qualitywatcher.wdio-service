@@ -27,7 +27,7 @@
     "webdriverio": "^8.32.3"
   },
   "dependencies": {
-    "@qualitywatcher/wdio-reporter": "^1.0.8",
+    "@qualitywatcher/wdio-reporter": "^1.0.9",
     "ansi-colors": "^4.1.1",
     "axios": "^1.6.7",
     "uuid": "^9.0.1"
